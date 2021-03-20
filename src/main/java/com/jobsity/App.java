@@ -7,26 +7,28 @@ import com.jobsity.interfaces.Game;
 import com.jobsity.models.BowlingGame;
 
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Hello world!
  */
 public class App {
+    static Logger logger = Logger.getLogger(App.class.getName());
     public static void main(String[] args) throws IOException {
+        logger.setLevel(Level.FINEST);
 
+        try {
         //input file reading
-        File file = new File(args[0]);
+        String inputFileName = args.length > 0 ? args[0] : "input.txt";
+        File file = new File(inputFileName);
         BufferedReader br = new BufferedReader(new FileReader(file));
-
-        //output file configuration
-        String outputFileName = args.length > 1 ? args[1] : "output.txt";
-        FileOutputStream outputStream = new FileOutputStream(outputFileName);
 
 
         String line = br.readLine();
         Game bowling = new BowlingGame();
         boolean gameStarted = false;
-        try {
+
             while (!Utils.isBlank(line)) {
                 String[] nameAndPins = line.split(" ");
                 String name = nameAndPins[0];
@@ -40,27 +42,23 @@ public class App {
             if (gameStarted) {
                 String scores = bowling.printPlayersScores();
                 System.out.println(scores);
-                outputStream.write(scores.getBytes());
 
             } else {
-                System.out.println("Game couldn't start");
+                System.err.println("Game couldn't start");
             }
+
+
+            br.close();
         } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Invalid entry");
-            e.printStackTrace();
         } catch (IndexOutOfBoundsException e) {
             System.err.println("Not enough rounds");
-            e.printStackTrace();
         } catch (InvalidRoundException e) {
             System.err.println(e.getMessage());
-            e.printStackTrace();
         } catch (GameException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+        }catch (FileNotFoundException e){
+            System.err.println("Input file not found, game couldn't start");
         }
-
-        outputStream.close();
-        br.close();
-
-
     }
 }
