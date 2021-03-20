@@ -11,6 +11,7 @@
   <name>bowling-game</name>
 
   <properties>
+    <exec.mainClass>src/main/com.jobsity/App.java</exec.mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -78,6 +79,22 @@
                   <target>1.8</target>
               </configuration>
           </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2.1</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>java</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <mainClass>com.jobsity.App</mainClass>
+          </configuration>
+        </plugin>
       </plugins>
   </build>
 </project>

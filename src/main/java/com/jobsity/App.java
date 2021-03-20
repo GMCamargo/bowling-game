@@ -5,18 +5,23 @@ import com.jobsity.exceptions.GameException;
 import com.jobsity.exceptions.InvalidRoundException;
 import com.jobsity.interfaces.Game;
 import com.jobsity.models.BowlingGame;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 
 /**
  * Hello world!
- *
  */
-public class App 
-{
+public class App {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        //input file reading
+        File file = new File(args[0]);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        //output file configuration
+        String outputFileName = args.length > 1 ? args[1] : "output.txt";
+        FileOutputStream outputStream = new FileOutputStream(outputFileName);
+
 
         String line = br.readLine();
         Game bowling = new BowlingGame();
@@ -28,27 +33,34 @@ public class App
                 String entry = nameAndPins[1];
 
                 bowling.play(name, entry);
-
                 line = br.readLine();
                 gameStarted = true;
             }
 
-            if (gameStarted)
-                System.out.println(bowling.printPlayersScores());
-            else {
+            if (gameStarted) {
+                String scores = bowling.printPlayersScores();
+                System.out.println(scores);
+                outputStream.write(scores.getBytes());
+
+            } else {
                 System.out.println("Game couldn't start");
             }
-        }catch(ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Invalid entry");
             e.printStackTrace();
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             System.err.println("Not enough rounds");
             e.printStackTrace();
-        }catch (InvalidRoundException e) {
+        } catch (InvalidRoundException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
         } catch (GameException e) {
             e.printStackTrace();
         }
+
+        outputStream.close();
+        br.close();
+
+
     }
 }
