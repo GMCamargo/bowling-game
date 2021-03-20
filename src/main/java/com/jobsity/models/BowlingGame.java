@@ -1,9 +1,10 @@
 package com.jobsity.models;
 
+import com.jobsity.exceptions.*;
 import com.jobsity.interfaces.Game;
-import com.jobsity.interfaces.Player;
 import com.jobsity.interfaces.dict.EntryEnum;
 
+import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,9 +13,7 @@ public class BowlingGame implements Game {
     private int currentPlayer = 0;
     private LinkedHashMap<String, Bowler> players = new LinkedHashMap<String, Bowler>();
 
-    public void play(String name, String entry) throws Exception {
-
-
+    public void play(String name, String entry) throws GameException {
 
         if (!players.containsKey(name) && round == 0) {
             players.put(name, new Bowler(name, processEntry(entry), currentPlayer));
@@ -35,10 +34,10 @@ public class BowlingGame implements Game {
                         passTurn(name);
                 }
             } else {
-                throw new Exception("It's not " + name + "'s turn");
+                throw new InvalidPlayerTurnException(name);
             }
         } else {
-            throw new Exception("Player " + name + " is not able to play now");
+            throw new InvalidPlayerException(name);
         }
     }
 
@@ -49,20 +48,26 @@ public class BowlingGame implements Game {
         }
     }
 
-    public void printPlayersScores() {
-        System.out.println("Frame" + "\t\t" + 1 + "\t\t" + 2 + "\t\t" + 3 + "\t\t" + 4 + "\t\t" + 5 + "\t\t" + 6 + "\t\t" + 7 + "\t\t" + 8 + "\t\t" + 9 + "\t\t" + 10);
+    public String printPlayersScores() throws InvalidRoundException {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Frame" + "\t\t" + 1 + "\t\t" + 2 + "\t\t" + 3 + "\t\t" + 4 + "\t\t" + 5 + "\t\t" + 6 + "\t\t" + 7 + "\t\t" + 8 + "\t\t" + 9 + "\t\t" + 10 + "\n");
+
         for (Map.Entry<String, Bowler> b :
                 players.entrySet()) {
-            b.getValue().printPlayerScores();
+            sb.append(b.getValue().printPlayerScores());
         }
+
+        return sb.toString();
     }
 
-    void passTurn(String name) {
+    void passTurn(String name){
         currentPlayer++;
         players.get(name).resetTimesPlayed();
     }
+
     @Override
-    public EntryEnum processEntry(String entry) throws Exception {
+    public EntryEnum processEntry(String entry) throws InvalidEntryException {
         switch (entry) {
             case "F":
                 return EntryEnum.FOUL;
@@ -91,6 +96,6 @@ public class BowlingGame implements Game {
 
 
         }
-        throw new Exception("Entry value " + entry + " is not allowed");
+        throw new InvalidEntryException("Entry value " + entry + " is not allowed");
     }
 }

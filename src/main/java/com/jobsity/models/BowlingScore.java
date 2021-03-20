@@ -1,5 +1,7 @@
 package com.jobsity.models;
 
+import com.jobsity.exceptions.InvalidEntryException;
+import com.jobsity.exceptions.InvalidRoundException;
 import com.jobsity.interfaces.Round;
 import com.jobsity.interfaces.Score;
 import com.jobsity.interfaces.dict.EntryEnum;
@@ -18,20 +20,20 @@ public class BowlingScore implements Score {
         }
     }
 
-    public void registry_play(EntryEnum pins, int currentRound) throws Exception {
+    public void registry_play(EntryEnum pins, int currentRound) throws InvalidEntryException {
         this.currentRound = currentRound;
         if (!rounds[currentRound].hasStrike())
             rounds[currentRound].registry_play(pins);
         else if (rounds[currentRound].hasStrike())
             if (currentRound == 9)
                 rounds[currentRound].registry_play(pins);
-            else throw new Exception("This play is not possible to be registered");
+            else throw new InvalidEntryException("This play is not possible to be registered");
 
         balls.add(pins.getValue());
     }
 
 
-    public void printScore() {
+    public String printScore() throws InvalidRoundException {
         int previousTurnScore = 0;
 
 
@@ -43,21 +45,30 @@ public class BowlingScore implements Score {
             previousTurnScore = rounds[i].getRoundScore();
 
 
-            if (rounds[i].hasStrike() && i < 9) {
-                pinfalls.append("\t").append(rounds[i].getAllPlays());
+            if (i < 9) {
+                if (rounds[i].hasStrike()){
+                    pinfalls.append("\t").append(rounds[i].getAllPlays());
+                }else {
+                    pinfalls.append(rounds[i].getAllPlays());
+                }
+                score.append(rounds[i].getRoundScore()).append("\t\t");
+
             } else {
-                pinfalls.append(rounds[i].getAllPlays());
+                String s = rounds[i].getAllPlays();
+                pinfalls.append(s.subSequence(0, s.length() - 1));
+                score.append(rounds[i].getRoundScore());
             }
-
-            score.append(rounds[i].getRoundScore()).append("\t\t");
         }
+        StringBuilder result = new StringBuilder();
 
-        System.out.println(pinfalls);
-        System.out.println(score);
+        result.append(pinfalls).append("\n").append(score).append("\n");
+        //System.out.println(pinfalls);
+        //System.out.println(score);
 
+        return result.toString();
     }
 
-    public int calculateScore(int round, int previousTurnScore) {
+    public int calculateScore(int round, int previousTurnScore) throws InvalidRoundException {
 
 
         int result = previousTurnScore;
@@ -75,7 +86,7 @@ public class BowlingScore implements Score {
         }else {
             balls.pop();
             balls.pop();
-            result += rounds[round].getDownedPins();
+            result += rounds[round].getDownedPins(round);
         }
         return result;
     }

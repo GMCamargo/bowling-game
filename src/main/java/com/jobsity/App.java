@@ -1,9 +1,10 @@
 package com.jobsity;
 
+import com.jobsity.Utils.Utils;
+import com.jobsity.exceptions.GameException;
+import com.jobsity.exceptions.InvalidRoundException;
 import com.jobsity.interfaces.Game;
 import com.jobsity.models.BowlingGame;
-
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,12 +17,12 @@ public class App
 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedOutputStream result = new BufferedOutputStream(System.out);
 
         String line = br.readLine();
         Game bowling = new BowlingGame();
+        boolean gameStarted = false;
         try {
-            while (!line.isEmpty() && !line.equals("\n")) {
+            while (!Utils.isBlank(line)) {
                 String[] nameAndPins = line.split(" ");
                 String name = nameAndPins[0];
                 String entry = nameAndPins[1];
@@ -29,14 +30,24 @@ public class App
                 bowling.play(name, entry);
 
                 line = br.readLine();
+                gameStarted = true;
             }
 
-            bowling.printPlayersScores();
+            if (gameStarted)
+                System.out.println(bowling.printPlayersScores());
+            else {
+                System.out.println("Game couldn't start");
+            }
         }catch(ArrayIndexOutOfBoundsException e){
             System.err.println("Invalid entry");
             e.printStackTrace();
-        }
-        catch (Exception e) {
+        }catch (IndexOutOfBoundsException e){
+            System.err.println("Not enough rounds");
+            e.printStackTrace();
+        }catch (InvalidRoundException e) {
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        } catch (GameException e) {
             e.printStackTrace();
         }
     }
