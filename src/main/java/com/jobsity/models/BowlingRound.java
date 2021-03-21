@@ -2,14 +2,14 @@ package com.jobsity.models;
 
 import com.jobsity.exceptions.InvalidEntryException;
 import com.jobsity.exceptions.InvalidRoundException;
+import com.jobsity.interfaces.BowlingGameRound;
 import com.jobsity.interfaces.Round;
 import com.jobsity.interfaces.dict.EntryEnum;
 
 import java.util.ArrayList;
 
-public class BowlingRound implements Round {
+public class BowlingRound implements BowlingGameRound {
     ArrayList<String> plays = new ArrayList<String>();
-    ArrayList<Integer> playScore = new ArrayList<Integer>();
 
     //The number of pins downed
     int downedPins = 0;
@@ -18,11 +18,9 @@ public class BowlingRound implements Round {
     //flags if the round has a strike
     boolean spare, strike = false;
 
-
-    public void registry_play(EntryEnum pins) throws InvalidEntryException {
-        downedPins += pins.getValue();
-        plays.add(convertToMark(pins));
-        playScore.add(pins.getValue());
+    public void registryPlay(EntryEnum entry) throws InvalidEntryException {
+        downedPins += entry.getValue();
+        plays.add(convertToMark(entry));
     }
 
     //TODO: ARRUMAR ISSO AQUI (Não pode aceitar se downedpins > 10, não aceitar mais que 2 bolas)
@@ -74,9 +72,5 @@ public class BowlingRound implements Round {
 
     public void setRoundScore(int roundScore) {
         this.roundScore = roundScore;
-    }
-
-    public int getPlayScore(int i) {
-        return i > 0 ? playScore.get(i) : 0;
     }
 }

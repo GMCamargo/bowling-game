@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Hello world!
+ * Main class to execute the game.
  */
 public class App {
     static Logger logger = Logger.getLogger(App.class.getName());
@@ -46,8 +46,6 @@ public class App {
             } else {
                 System.err.println("Game couldn't start");
             }
-
-
             br.close();
         } catch (ArrayIndexOutOfBoundsException e) {
             System.err.println("Invalid entry");

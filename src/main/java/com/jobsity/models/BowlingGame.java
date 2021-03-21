@@ -2,13 +2,14 @@ package com.jobsity.models;
 
 import com.jobsity.exceptions.*;
 import com.jobsity.interfaces.Game;
+import com.jobsity.interfaces.TurnBasedGame;
 import com.jobsity.interfaces.dict.EntryEnum;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class BowlingGame implements Game {
+public class BowlingGame implements TurnBasedGame {
     private int round = 0;
     private int currentPlayer = 0;
     private LinkedHashMap<String, Bowler> players = new LinkedHashMap<String, Bowler>();
@@ -22,7 +23,7 @@ public class BowlingGame implements Game {
         } else if (players.get(name) != null) {
             passRound();
             if (players.get(name).getPosition() == currentPlayer) {
-                players.get(name).registry_play(processEntry(entry), round);
+                players.get(name).registryPlay(processEntry(entry), round);
                 if (round != 9) {
                     if (players.get(name).hasStrikeInCurrentRound(round)) {
                         passTurn(name);
@@ -41,7 +42,7 @@ public class BowlingGame implements Game {
         }
     }
 
-    private void passRound() {
+    public void passRound() {
         if (currentPlayer == players.size()) {
             round++;
             currentPlayer = 0;
@@ -61,7 +62,7 @@ public class BowlingGame implements Game {
         return sb.toString();
     }
 
-    void passTurn(String name){
+    public void passTurn(String name){
         currentPlayer++;
         players.get(name).resetTimesPlayed();
     }

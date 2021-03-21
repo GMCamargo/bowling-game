@@ -2,16 +2,14 @@ package com.jobsity.models;
 
 import com.jobsity.exceptions.InvalidEntryException;
 import com.jobsity.exceptions.InvalidRoundException;
-import com.jobsity.interfaces.Player;
-import com.jobsity.interfaces.Score;
+import com.jobsity.interfaces.BowlingGameScore;
+import com.jobsity.interfaces.TurnBasedPlayer;
 import com.jobsity.interfaces.dict.EntryEnum;
 
-import java.util.LinkedList;
-
-public class Bowler implements Player {
+public class Bowler implements TurnBasedPlayer {
 
     private String name;
-    private BowlingScore score;
+    private BowlingGameScore score;
     private int position;
     int timesPlayed = 0;
 
@@ -19,11 +17,11 @@ public class Bowler implements Player {
         this.name = name;
         this.score = new BowlingScore();
         this.position = position;
-        registry_play(pins,0);
+        registryPlay(pins,0);
     }
 
-    public void registry_play(EntryEnum pins, int currentRound) throws InvalidEntryException {
-        score.registry_play(pins,currentRound);
+    public void registryPlay(EntryEnum pins, int currentRound) throws InvalidEntryException {
+        score.registryPlay(pins,currentRound);
         timesPlayed++;
     }
 
@@ -38,10 +36,6 @@ public class Bowler implements Player {
         sb.append(score.printScore());
 
         return sb.toString();
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public int getTimesPlayed() {

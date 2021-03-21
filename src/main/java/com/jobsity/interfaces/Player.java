@@ -1,13 +1,26 @@
 package com.jobsity.interfaces;
 
-import com.jobsity.exceptions.InvalidEntryException;
 import com.jobsity.exceptions.InvalidRoundException;
-import com.jobsity.interfaces.dict.EntryEnum;
 
+/**
+ * Represents a player
+ * */
 public interface Player {
-    void registry_play(EntryEnum pins, int currentRound) throws InvalidEntryException;
-    int getPosition();
+    /**
+     *
+     * @return Returns a String with this player score
+     * @throws InvalidRoundException thrown if there's a invalid round
+     */
     String printPlayerScores() throws InvalidRoundException;
+
+    /**
+     * Gets the number of times this player has already played
+     * @return the number of times player for this player
+     */
     int getTimesPlayed();
+
+    /**
+     * resets the number of times player for this player
+     */
     void resetTimesPlayed();
 }

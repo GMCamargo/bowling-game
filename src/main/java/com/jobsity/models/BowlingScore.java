@@ -2,15 +2,13 @@ package com.jobsity.models;
 
 import com.jobsity.exceptions.InvalidEntryException;
 import com.jobsity.exceptions.InvalidRoundException;
-import com.jobsity.interfaces.Round;
-import com.jobsity.interfaces.Score;
+import com.jobsity.interfaces.BowlingGameRound;
+import com.jobsity.interfaces.BowlingGameScore;
 import com.jobsity.interfaces.dict.EntryEnum;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class BowlingScore implements Score {
-    BowlingRound[] rounds = new BowlingRound[10];
+public class BowlingScore implements BowlingGameScore {
+    BowlingGameRound[] rounds = new BowlingGameRound[10];
     int currentRound = 0;
     LinkedList<Integer> balls = new LinkedList<>();
 
@@ -20,13 +18,13 @@ public class BowlingScore implements Score {
         }
     }
 
-    public void registry_play(EntryEnum pins, int currentRound) throws InvalidEntryException {
+    public void registryPlay(EntryEnum pins, int currentRound) throws InvalidEntryException {
         this.currentRound = currentRound;
         if (!rounds[currentRound].hasStrike())
-            rounds[currentRound].registry_play(pins);
+            rounds[currentRound].registryPlay(pins);
         else if (rounds[currentRound].hasStrike())
             if (currentRound == 9)
-                rounds[currentRound].registry_play(pins);
+                rounds[currentRound].registryPlay(pins);
             else throw new InvalidEntryException("This play is not possible to be registered");
 
         balls.add(pins.getValue());
@@ -59,16 +57,11 @@ public class BowlingScore implements Score {
                 score.append(rounds[i].getRoundScore());
             }
         }
-        StringBuilder result = new StringBuilder();
 
-        result.append(pinfalls).append("\n").append(score).append("\n");
-        //System.out.println(pinfalls);
-        //System.out.println(score);
-
-        return result.toString();
+        return pinfalls + "\n" + score + "\n";
     }
 
-    public int calculateScore(int round, int previousTurnScore) throws InvalidRoundException {
+    private int calculateScore(int round, int previousTurnScore) throws InvalidRoundException {
 
 
         int result = previousTurnScore;
