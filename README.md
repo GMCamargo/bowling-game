@@ -18,12 +18,12 @@ The input and output file can be changed through arguments.
 
 * In the root folder run:
 ```
-mvn package clean compile exec:java
+mvn test clean compile exec:java
 ```
 
 * To change the input file path:
 ```
-mvn package clean compile exec:java -Dexec.args="your-input-file-path-here.txt"
+mvn test clean compile exec:java -Dexec.args="your-input-file-path-here.txt"
 ```
 
 ## Bonus Tasks
