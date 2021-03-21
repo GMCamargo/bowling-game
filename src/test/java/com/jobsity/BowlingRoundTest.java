@@ -19,19 +19,19 @@ public class BowlingRoundTest {
         BowlingRound round = new BowlingRound();
         try {
             //testing foul mark
-            round.registry_play(EntryEnum.FOUL);
-            round.registry_play(EntryEnum.ZERO);
+            round.registryPlay(EntryEnum.FOUL);
+            round.registryPlay(EntryEnum.ZERO);
             Assert.assertEquals("F\t0\t" ,round.getAllPlays());
 
             //testing strike mark
             round = new BowlingRound();
-            round.registry_play(EntryEnum.STRIKE);
+            round.registryPlay(EntryEnum.STRIKE);
             Assert.assertEquals("X\t", round.getAllPlays());
 
             //testing spare mark
             round = new BowlingRound();
-            round.registry_play(EntryEnum.ONE);
-            round.registry_play(EntryEnum.NINE);
+            round.registryPlay(EntryEnum.ONE);
+            round.registryPlay(EntryEnum.NINE);
             Assert.assertEquals("1\t/\t", round.getAllPlays());
 
 
@@ -49,8 +49,8 @@ public class BowlingRoundTest {
         try {
             BowlingRound round = new BowlingRound();
             //value greater then 10
-            round.registry_play(EntryEnum.FIVE);
-            round.registry_play(EntryEnum.SIX);
+            round.registryPlay(EntryEnum.FIVE);
+            round.registryPlay(EntryEnum.SIX);
             round.getDownedPins(0);
         }catch (InvalidRoundException e){
             Assert.assertEquals("Invalid value entry in round 0", e.getMessage());
@@ -61,8 +61,8 @@ public class BowlingRoundTest {
         try {
             BowlingRound round = new BowlingRound();
             //value greater then 10
-            round.registry_play(EntryEnum.FIVE);
-            round.registry_play(EntryEnum.SIX);
+            round.registryPlay(EntryEnum.FIVE);
+            round.registryPlay(EntryEnum.SIX);
             round.getDownedPins(0);
         }catch (InvalidRoundException e){
             Assert.assertEquals("Invalid value entry in round 0", e.getMessage());
@@ -73,8 +73,8 @@ public class BowlingRoundTest {
         try {
             BowlingRound round = new BowlingRound();
             //value greater then 10
-            round.registry_play(EntryEnum.STRIKE);
-            round.registry_play(EntryEnum.ONE);
+            round.registryPlay(EntryEnum.STRIKE);
+            round.registryPlay(EntryEnum.ONE);
             round.getDownedPins(0);
         }catch (InvalidRoundException e){
             Assert.assertEquals("Invalid value entry in round 0", e.getMessage());
